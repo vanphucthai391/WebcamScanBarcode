@@ -7,6 +7,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ZXing;
@@ -18,6 +19,9 @@ namespace WebcamScanBarcode
     {
         private FilterInfoCollection videoDevices;
         private VideoCaptureDevice videoSource;
+        private string serverFtpin = @"\\192.168.145.7\ftpin\TTTT";
+        private bool dataSent = false;
+
         public Form1()
         {
             InitializeComponent();
@@ -25,6 +29,7 @@ namespace WebcamScanBarcode
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            btnStop.Enabled = false;
             videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
             if (videoDevices.Count == 0)
             {
@@ -32,7 +37,7 @@ namespace WebcamScanBarcode
                 return;
             }
         }
-        private void VideoSource_NewFrame(object sender, NewFrameEventArgs eventArgs)
+        private async void VideoSource_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
             try
             {
@@ -40,8 +45,9 @@ namespace WebcamScanBarcode
                 BarcodeReader reader = new BarcodeReader();
                 var result = reader.Decode(bitmap);
 
-                if (result != null)
+                if (result != null&&!dataSent)
                 {
+                    dataSent = true;
                     string decodedText = result.Text;
                     string[] decodedTextArray = decodedText.Split(';');
                     if(decodedTextArray.Length!=3)
@@ -50,26 +56,20 @@ namespace WebcamScanBarcode
                     }
                     else
                     {
-                        txtMessage.Invoke(new MethodInvoker(delegate ()
-                        {
-                            txtMessage.Text = decodedText;
-                        }));
-                        lbEmp.Invoke(new MethodInvoker(delegate ()
+                        string timeCheck= DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss tt");
+                        Invoke((MethodInvoker)async delegate
                         {
                             lbEmp.Text = decodedTextArray[0];
-                        }));
-                        lbName.Invoke(new MethodInvoker(delegate ()
-                        {
                             lbName.Text = decodedTextArray[1];
-                        }));
-                        lbSection.Invoke(new MethodInvoker(delegate ()
-                        {
                             lbSection.Text = decodedTextArray[2];
-                        }));
-                        stopCamera();
+                            lbTime.Text = timeCheck;
+                            await Task.Delay(2000); // Delay for 2 seconds before stopping the camera (adjust as needed)
+                            stopCamera();
+                            btnStop.Enabled = false;
+                            btnStart.Enabled = true;
+                        });
+                        pushDataToPqm(lbEmp.Text, lbName.Text, lbSection.Text, lbTime.Text);
                     }
-
-
                 }
                 pictureBox1.Image = bitmap;
             }
@@ -78,9 +78,9 @@ namespace WebcamScanBarcode
                 MessageBox.Show("Lỗi: " + ex.Message);
             }
         }
-
         private void btnStart_Click(object sender, EventArgs e)
         {
+            dataSent = false;
             btnStart.Enabled = false;
             btnStop.Enabled = true;
             resetInfo();
@@ -94,8 +94,8 @@ namespace WebcamScanBarcode
             btnStart.Enabled = true;
             btnStop.Enabled = false;
             stopCamera();
-        }
 
+        }
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             stopCamera();
@@ -106,14 +106,44 @@ namespace WebcamScanBarcode
             {
                 videoSource.Stop();
                 pictureBox1.Image = null;
+                videoSource = null;
+
             }
         }
         private void resetInfo()
         {
-            txtMessage.Clear();
             lbEmp.Text = "";
             lbName.Text = "";
             lbSection.Text = "";
+            lbTime.Text = "";
+        }
+        private void pushDataToPqm(string empNo, string nameOrg, string section, string timeOrg)
+        {
+            string name = Regex.Replace(nameOrg, @"\s", "");
+            string model = "BGL_0246";
+            string site = "NCVP";
+            string factory = "2B";
+            string line = "1";
+            string process = "GATE";
+            string inspect = "CHECKIN";
+            string[] datetime = timeOrg.Split(' ');
+            string date = datetime[0];
+            string time = datetime[1];
+            string nameFile = "BGL0246_" + DateTime.Now.ToString("yyyyMMddHHmmssfff")+".csv";
+            string outFile = serverFtpin+"/"+ nameFile;
+            try
+            {
+                System.IO.File.AppendAllText(outFile, name + "," + section+"_"+ empNo + "," + model + "," + site + "," + factory + "," + line + "," + process + "," + inspect + "," + date + "," + time + ", 0,0,,\r\n");
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
