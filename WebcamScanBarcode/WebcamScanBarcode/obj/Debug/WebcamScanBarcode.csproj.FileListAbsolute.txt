@@ -41,3 +41,9 @@ D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarco
 D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarcode\obj\Debug\WebcamScanBarcode.TrustInfo.xml
 D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarcode\obj\Debug\WebcamScanBarcode.exe.manifest
 D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarcode\obj\Debug\WebcamScanBarcode.application
+D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarcode\obj\Debug\WebcamScanBarcode.frmReport.resources
+D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarcode\bin\Debug\Mono.Security.dll
+D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarcode\bin\Debug\Npgsql.dll
+D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarcode\bin\Debug\QRCoder.dll
+D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarcode\obj\Debug\WebcamScanBarcode.frmRegister.resources
+D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarcode\obj\Debug\WebcamScanBarcode.frmLogin.resources

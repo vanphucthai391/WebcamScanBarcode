@@ -14,14 +14,14 @@
     <framework targetVersion="4.5.2" profile="Full" supportedRuntime="4.0.30319" />
   </compatibleFrameworks>
   <dependency>
-    <dependentAssembly dependencyType="install" codebase="WebcamScanBarcode.exe.manifest" size="9287">
+    <dependentAssembly dependencyType="install" codebase="WebcamScanBarcode.exe.manifest" size="11299">
       <assemblyIdentity name="WebcamScanBarcode.exe" version="1.0.0.3" publicKeyToken="0000000000000000" language="neutral" processorArchitecture="msil" type="win32" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>IZj10pFzEOShKral28ZmNOBZ0JdOZfnl/J6rVDx3vR0=</dsig:DigestValue>
+        <dsig:DigestValue>UPQHO0+AbpwLNLtL0vvevcE4r+x8rMLPkbre10L6tUA=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>
