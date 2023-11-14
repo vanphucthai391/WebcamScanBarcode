@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmReport));
             this.dgvReport = new System.Windows.Forms.DataGridView();
             this.dtpFrom = new System.Windows.Forms.DateTimePicker();
             this.label1 = new System.Windows.Forms.Label();
@@ -48,6 +49,7 @@
             this.dgvReport.Name = "dgvReport";
             this.dgvReport.Size = new System.Drawing.Size(862, 342);
             this.dgvReport.TabIndex = 0;
+            this.dgvReport.CellFormatting += new System.Windows.Forms.DataGridViewCellFormattingEventHandler(this.dgvReport_CellFormatting);
             // 
             // dtpFrom
             // 
@@ -109,6 +111,7 @@
             this.Controls.Add(this.dtpFrom);
             this.Controls.Add(this.dgvReport);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "frmReport";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Report";

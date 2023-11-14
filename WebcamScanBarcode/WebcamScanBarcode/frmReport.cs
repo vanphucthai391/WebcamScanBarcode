@@ -14,7 +14,6 @@ namespace WebcamScanBarcode
     {
         string tableThisMonthData;
         string tableLastMonthData;
-        DataTable dt = new DataTable();
         public frmReport()
         {
             InitializeComponent();
@@ -33,17 +32,18 @@ namespace WebcamScanBarcode
             string checkInTo = dtpTo.Value.ToString();
             TfSQL tf = new TfSQL();
             string sql;
+            DataTable dt = new DataTable();
             if (tf.CheckTableExist(tableLastMonthData) && tf.CheckTableExist(tableThisMonthData))
             {
-                sql = string.Format("select serno, lot, inspectdate from {0} where inspectdate >='{1}' and inspectdate <'{2}' UNION ALL select serno,lot, inspectdate from {3} where inspectdate >='{1}' and inspectdate <'{2}' order by inspectdate DESC", tableThisMonthData, checkInFrom, checkInTo, tableLastMonthData);
+                sql = string.Format("select serno, lot, inspectdate,judge from {0} where inspectdate >='{1}' and inspectdate <'{2}' UNION ALL select serno,lot, inspectdate,judge from {3} where inspectdate >='{1}' and inspectdate <'{2}' order by inspectdate DESC", tableThisMonthData, checkInFrom, checkInTo, tableLastMonthData);
             }
             else if (tf.CheckTableExist(tableLastMonthData) && !tf.CheckTableExist(tableThisMonthData))
             {
-                sql = string.Format("select serno, lot, inspectdate from {0} where inspectdate >='{1}' and inspectdate <'{2}' order by inspectdate DESC", tableLastMonthData, checkInFrom, checkInTo);
+                sql = string.Format("select serno, lot, inspectdate, judge from {0} where inspectdate >='{1}' and inspectdate <'{2}' order by inspectdate DESC", tableLastMonthData, checkInFrom, checkInTo);
             }
             else
             {
-                sql = string.Format("select serno, lot, inspectdate from {0} where inspectdate >='{1}' and inspectdate <'{2}' order by inspectdate DESC", tableThisMonthData, checkInFrom, checkInTo);
+                sql = string.Format("select serno, lot, inspectdate, judge from {0} where inspectdate >='{1}' and inspectdate <'{2}' order by inspectdate DESC", tableThisMonthData, checkInFrom, checkInTo);
             }
             tf.sqlDataAdapterFillDatatableFromTesterDb(sql, ref dt);
             dgvReport.DataSource = dt;
@@ -64,6 +64,19 @@ namespace WebcamScanBarcode
         {
             dtpSet10daysBefore(dtpFrom);
             dtpSetEndCurrentDay(dtpTo);
+        }
+
+        private void dgvReport_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
+        {
+            if (dgvReport.Columns[e.ColumnIndex].Name == "judge" && e.Value != null && e.Value.ToString() == "1")
+            {
+                for(int i=0; i < dgvReport.Columns.Count; i++)
+                {
+                    dgvReport.Rows[e.RowIndex].Cells[i].Style.BackColor = Color.Red;
+                    dgvReport.Rows[e.RowIndex].Cells[i].Style.ForeColor = Color.White;
+                }
+
+            }
         }
     }
 }

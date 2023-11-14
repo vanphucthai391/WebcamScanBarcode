@@ -32,8 +32,6 @@ D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarco
 D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarcode\bin\Debug\AForge.Video.DirectShow.xml
 D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarcode\bin\Debug\zxing.xml
 D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarcode\bin\Debug\zxing.presentation.xml
-D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarcode\obj\Debug\WebcamScanBarcode.csprojResolveAssemblyReference.cache
-D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarcode\obj\Debug\WebcamScanBarcode.Form1.resources
 D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarcode\obj\Debug\WebcamScanBarcode.Properties.Resources.resources
 D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarcode\obj\Debug\WebcamScanBarcode.csproj.GenerateResource.Cache
 D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarcode\bin\Debug\WebcamScanBarcode.exe.manifest
@@ -47,3 +45,5 @@ D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarco
 D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarcode\bin\Debug\QRCoder.dll
 D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarcode\obj\Debug\WebcamScanBarcode.frmRegister.resources
 D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarcode\obj\Debug\WebcamScanBarcode.frmLogin.resources
+D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarcode\obj\Debug\WebcamScanBarcode.frmCheckin.resources
+D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarcode\obj\Debug\WebcamScanBarcode.csprojResolveAssemblyReference.cache

@@ -10,7 +10,6 @@ namespace WebcamScanBarcode
 {
     class TfSQL
     {
-        NpgsqlConnection connection;
         string conStringTesterDb = @"Server=192.168.145.12;Port=5432;User Id=pqm;Password=dbuser;Database=pqmdb; CommandTimeout=100; Timeout=100;";
         public void sqlDataAdapterFillDatatableFromTesterDb(string sql, ref DataTable dt)
         {

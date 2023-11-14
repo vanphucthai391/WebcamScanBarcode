@@ -16,7 +16,7 @@ using ZXing.Common;
 
 namespace WebcamScanBarcode
 {
-    public partial class Form1 : Form
+    public partial class frmCheckin : Form
     {
         public delegate void RefreshEventHandler(object sender, EventArgs e);
         public event RefreshEventHandler RefreshEvent;
@@ -25,13 +25,16 @@ namespace WebcamScanBarcode
         private string serverFtpin = @"\\192.168.145.7\ftpin\BGL_0246";
         private bool dataSent = false;
 
-        public Form1()
+        public frmCheckin()
         {
             InitializeComponent();
         }
         string foldermonth;
+        /*COM c1 = new COM();*/
         private void Form1_Load(object sender, EventArgs e)
         {
+            /*c1.initializePort();
+            lbCOM.Text=c1.getNamePort();*/
             string datalocal = @"C:\BGL0246_CHECKIN";
             if (!Directory.Exists(datalocal))
                 Directory.CreateDirectory(datalocal);
@@ -51,6 +54,7 @@ namespace WebcamScanBarcode
             }
             ToolStripMenuItem toolStripMenuItem = (ToolStripMenuItem)menuStrip1.Items["registerToolStripMenuItem"];
             toolStripMenuItem.Visible = false;
+            
         }
         private async void VideoSource_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
@@ -83,8 +87,7 @@ namespace WebcamScanBarcode
                             btnStart.Enabled = true;
                         });
                         await Task.Run(() => {
-                            pushDataToPqm(lbEmp.Text, lbName.Text, lbSection.Text, lbTime.Text);
-                            saveAtLocal(lbEmp.Text, lbName.Text, lbSection.Text, lbTime.Text);
+                            authenticationWithMasterList(lbEmp.Text, lbName.Text, lbSection.Text, lbTime.Text);
                         });
                     }
                     else
@@ -120,6 +123,7 @@ namespace WebcamScanBarcode
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             stopCamera();
+            /*c1.closeSerialPort();*/
         }
         private void stopCamera()
         {
@@ -138,7 +142,7 @@ namespace WebcamScanBarcode
             lbSection.Text = "";
             lbTime.Text = "";
         }
-        private void pushDataToPqm(string empNo, string nameOrg, string section, string timeOrg)
+        private void pushDataToPqm(string empNo, string nameOrg, string section, string timeOrg,string judge)
         {
             string name = Regex.Replace(nameOrg, @"\s", "");
             string model = "BGL_0246";
@@ -154,20 +158,20 @@ namespace WebcamScanBarcode
             string outFile = serverFtpin+"/"+ nameFile;
             try
             {
-                System.IO.File.AppendAllText(outFile, name + "," + section + "_" + empNo + "," + model + "," + site + "," + factory + "," + line + "," + process + "," + inspect + "," + date + "," + time + ",0,0,,\r\n");
+                System.IO.File.AppendAllText(outFile, name + "," + section + "_" + empNo + "," + model + "," + site + "," + factory + "," + line + "," + process + "," + inspect + "," + date + "," + time + "," +judge+ ","+ judge +",,\r\n");
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
         }
-        private void saveAtLocal( string empNo, string nameOrg, string section, string timeOrg)
+        private void saveAtLocal( string empNo, string nameOrg, string section, string timeOrg,string judge)
         {
             try
             {
                 string nameFile = "BGL0246_" + DateTime.Now.ToString("yyyyMMdd") + ".csv";
                 string outFile = foldermonth + "/" + nameFile;
-                System.IO.File.AppendAllText(outFile, timeOrg + "," + nameOrg + "," + section + "_" + empNo + "\r\n");
+                System.IO.File.AppendAllText(outFile, timeOrg + "," + nameOrg + "," + section + "_" + empNo+","+ judge + "\r\n");
             }
             catch (Exception ex)
             {
@@ -210,9 +214,40 @@ namespace WebcamScanBarcode
             ToolStripMenuItem toolStripMenuItem = (ToolStripMenuItem)menuStrip1.Items["registerToolStripMenuItem"];
             toolStripMenuItem.Visible = flag;
         }
-        private void authenticationWithMasterList()
+        private async void authenticationWithMasterList(string empNo, string nameOrg, string section, string timeOrg)
         {
-
+            string sernoQR = Regex.Replace(nameOrg, @"\s", "");
+            string lotQR = section + "_" + empNo;
+            string sql = "select * from bgl_0246_usermaster where serno='" + sernoQR + "' and lot='" + lotQR + "' and allow='t'";
+            DataTable dt = new DataTable();
+            TfSQL tf = new TfSQL();
+            tf.sqlDataAdapterFillDatatableFromTesterDb(sql, ref dt);
+            if (dt.Rows.Count < 1)
+            {
+                Invoke((MethodInvoker)delegate
+               {
+                   lbMessage.Text = "You are not in list to enter this room!";
+                   lbMessage.ForeColor = Color.Red;
+               });
+                await Task.Run(() => {
+                    pushDataToPqm(empNo, nameOrg, section, timeOrg, "1");
+                    saveAtLocal(empNo, nameOrg, section, timeOrg, "1");
+                });
+                /*c1.sendCmdToArduino("1");*/
+            }
+            else
+            {
+                Invoke((MethodInvoker)delegate
+                {
+                    lbMessage.Text = "WELCOME. Please get in!";
+                    lbMessage.ForeColor = Color.Green;
+                });
+                await Task.Run(() => {
+                    pushDataToPqm(empNo, nameOrg, section, timeOrg, "0");
+                    saveAtLocal(empNo, nameOrg, section, timeOrg, "0");
+                });
+                /*c1.sendCmdToArduino("0");*/
+            }
         }
     }
 }
