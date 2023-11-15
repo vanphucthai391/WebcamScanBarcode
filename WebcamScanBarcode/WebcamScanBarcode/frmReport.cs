@@ -21,8 +21,8 @@ namespace WebcamScanBarcode
         
         private void decideReferenceTable()
         {
-            tableThisMonthData = "bgl_0246" + DateTime.Today.ToString("yyyyMM") + "data";
-            tableLastMonthData = "bgl_0246" + ((VBS.Right(DateTime.Today.ToString("yyyyMM"), 2) != "01") ?
+            tableThisMonthData = "bgp_0372" + DateTime.Today.ToString("yyyyMM") + "data";
+            tableLastMonthData = "bgp_0372" + ((VBS.Right(DateTime.Today.ToString("yyyyMM"), 2) != "01") ?
        (long.Parse(DateTime.Today.ToString("yyyyMM")) - 1).ToString() : (long.Parse(DateTime.Today.ToString("yyyy")) - 1).ToString() + "12") + "data";
         }
         private void btnSearch_Click(object sender, EventArgs e)
@@ -68,15 +68,16 @@ namespace WebcamScanBarcode
 
         private void dgvReport_CellFormatting(object sender, DataGridViewCellFormattingEventArgs e)
         {
-            if (dgvReport.Columns[e.ColumnIndex].Name == "judge" && e.Value != null && e.Value.ToString() == "1")
-            {
-                for(int i=0; i < dgvReport.Columns.Count; i++)
-                {
-                    dgvReport.Rows[e.RowIndex].Cells[i].Style.BackColor = Color.Red;
-                    dgvReport.Rows[e.RowIndex].Cells[i].Style.ForeColor = Color.White;
-                }
+            //foreach (DataGridViewRow row in dgvReport.Rows)
+            //{
+            //    if (row.Cells.Count > 1 && row.Cells[2].Value != null && row.Cells[1].Value.ToString() == "1")
+            //    {
+            //        row.DefaultCellStyle.BackColor = Color.Red;
+            //        row.DefaultCellStyle.ForeColor = Color.White;
 
-            }
+            //    }
+            //}
+
         }
     }
 }

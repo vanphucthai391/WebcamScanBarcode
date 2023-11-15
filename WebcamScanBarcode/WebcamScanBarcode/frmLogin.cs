@@ -21,6 +21,22 @@ namespace WebcamScanBarcode
 
         private void btnOk_Click(object sender, EventArgs e)
         {
+            authenticatonWithUsernameAndPassword();
+        }
+
+        private void frmLogin_Load(object sender, EventArgs e)
+        {
+        }
+
+        private void txtPassword_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+                authenticatonWithUsernameAndPassword();
+            }
+        }
+        private void authenticatonWithUsernameAndPassword()
+        {
             if (txtUsername.Text == "Administrator" && txtPassword.Text == "12345678")
             {
                 MessageBox.Show("Successed", "Message", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -31,10 +47,6 @@ namespace WebcamScanBarcode
             {
                 MessageBox.Show("Login Failed", "Message", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
-        }
-
-        private void frmLogin_Load(object sender, EventArgs e)
-        {
         }
     }
 }

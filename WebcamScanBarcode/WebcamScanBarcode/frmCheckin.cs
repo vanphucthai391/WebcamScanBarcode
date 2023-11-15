@@ -22,8 +22,8 @@ namespace WebcamScanBarcode
         public event RefreshEventHandler RefreshEvent;
         private FilterInfoCollection videoDevices;
         private VideoCaptureDevice videoSource;
-        private string serverFtpin = @"\\192.168.145.7\ftpin\BGL_0246";
-        private bool dataSent = false;
+        private string serverFtpin = @"\\192.168.145.7\ftpin\BGP_0372";
+        private bool flagFrame = false;//take 1 Frame
 
         public frmCheckin()
         {
@@ -35,7 +35,7 @@ namespace WebcamScanBarcode
         {
             /*c1.initializePort();
             lbCOM.Text=c1.getNamePort();*/
-            string datalocal = @"C:\BGL0246_CHECKIN";
+            string datalocal = @"C:\BGP0372_CHECKIN";
             if (!Directory.Exists(datalocal))
                 Directory.CreateDirectory(datalocal);
             string folderyear = datalocal + @"\"  + DateTime.Now.ToString("yyyy");
@@ -64,27 +64,30 @@ namespace WebcamScanBarcode
                 BarcodeReader reader = new BarcodeReader();
                 var result = reader.Decode(bitmap);
 
-                if (result != null&&!dataSent)
+                if (result != null&&!flagFrame)
                 {
-                    dataSent = true;
+                    flagFrame = true;
                     string decodedText = result.Text;
                     //string[] decodedTextArray = decodedText.Split(';');
                     if(decodedText.StartsWith("##"))
                     {
                         string timeCheck = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss tt");//don't change format here
-                        Invoke((MethodInvoker)async delegate
-                        {
-                            string decodedText_remove2First= decodedText.Substring(2);
-                            lbName.Text = decodedText_remove2First.Substring(0, decodedText_remove2First.Length - 7);
-                            string decodedText_remove5Last = decodedText.Substring(2);
-                            string _7last = decodedText.Substring(decodedText.Length - 7, 7);//7 last
-                            lbEmp.Text = _7last.Substring(_7last.Length - 5, 5);//5 last
-                            lbSection.Text = _7last.Substring(0, 2);//2 first
-                            lbTime.Text = timeCheck;
-                            await Task.Delay(1000); // Delay for 1 seconds before stopping the camera (adjust as needed)
-                            stopCamera();
-                            btnStop.Enabled = false;
-                            btnStart.Enabled = true;
+                        await Task.Run(() => {
+                            Invoke((MethodInvoker)async delegate
+                            {
+                                string decodedText_remove2First = decodedText.Substring(2);
+                                lbName.Text = decodedText_remove2First.Substring(0, decodedText_remove2First.Length - 7);
+                                string decodedText_remove5Last = decodedText.Substring(2);
+                                string _7last = decodedText.Substring(decodedText.Length - 7, 7);//7 last
+                                lbEmp.Text = _7last.Substring(_7last.Length - 5, 5);//5 last
+                                lbSection.Text = _7last.Substring(0, 2);//2 first
+                                lbTime.Text = timeCheck;
+                                await Task.Delay(1000); // Delay for 1 seconds before stopping the camera (adjust as needed)
+                                stopCamera();
+                                btnStop.Enabled = false;
+                                btnStart.Enabled = true;
+                            });
+
                         });
                         await Task.Run(() => {
                             authenticationWithMasterList(lbEmp.Text, lbName.Text, lbSection.Text, lbTime.Text);
@@ -92,6 +95,7 @@ namespace WebcamScanBarcode
                     }
                     else
                     {
+                        flagFrame = false;
                         return;
                     }
                 }
@@ -104,7 +108,7 @@ namespace WebcamScanBarcode
         }
         private void btnStart_Click(object sender, EventArgs e)
         {
-            dataSent = false;
+            flagFrame = false;
             btnStart.Enabled = false;
             btnStop.Enabled = true;
             resetInfo();
@@ -141,11 +145,12 @@ namespace WebcamScanBarcode
             lbName.Text = "";
             lbSection.Text = "";
             lbTime.Text = "";
+            lbMessage.Text = "";
         }
         private void pushDataToPqm(string empNo, string nameOrg, string section, string timeOrg,string judge)
         {
             string name = Regex.Replace(nameOrg, @"\s", "");
-            string model = "BGL_0246";
+            string model = "BGP_0372";
             string site = "NCVP";
             string factory = "2B";
             string line = "1";
@@ -154,7 +159,7 @@ namespace WebcamScanBarcode
             string[] datetime = timeOrg.Split(' ');
             string date = datetime[0];
             string time = datetime[1];
-            string nameFile = "BGL0246_" + DateTime.Now.ToString("yyyyMMddHHmmssfff")+".csv";
+            string nameFile = "BGP0372_" + DateTime.Now.ToString("yyyyMMddHHmmssfff")+".csv";
             string outFile = serverFtpin+"/"+ nameFile;
             try
             {
@@ -169,7 +174,7 @@ namespace WebcamScanBarcode
         {
             try
             {
-                string nameFile = "BGL0246_" + DateTime.Now.ToString("yyyyMMdd") + ".csv";
+                string nameFile = "BGP0372_" + DateTime.Now.ToString("yyyyMMdd") + ".csv";
                 string outFile = foldermonth + "/" + nameFile;
                 System.IO.File.AppendAllText(outFile, timeOrg + "," + nameOrg + "," + section + "_" + empNo+","+ judge + "\r\n");
             }
@@ -218,7 +223,7 @@ namespace WebcamScanBarcode
         {
             string sernoQR = Regex.Replace(nameOrg, @"\s", "");
             string lotQR = section + "_" + empNo;
-            string sql = "select * from bgl_0246_usermaster where serno='" + sernoQR + "' and lot='" + lotQR + "' and allow='t'";
+            string sql = "select * from bgp_0372_usermaster where serno='" + sernoQR + "' and lot='" + lotQR + "' and allow='t'";
             DataTable dt = new DataTable();
             TfSQL tf = new TfSQL();
             tf.sqlDataAdapterFillDatatableFromTesterDb(sql, ref dt);
