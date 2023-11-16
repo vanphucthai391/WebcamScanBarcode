@@ -13,7 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <PublishUrl>\\192.168.145.7\software\NCVP SOFTWARE\BGL_0246\WebcamScanBarcode\</PublishUrl>
+    <PublishUrl>\\192.168.145.7\software\NCVP SOFTWARE\BGP_0372\WebcamScanBarcode\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Unc</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -162,6 +162,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
@@ -181,6 +182,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="4597922 %281%29.ico" />
+    <None Include="Resources\3595577-200.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">

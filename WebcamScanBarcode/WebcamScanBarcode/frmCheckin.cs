@@ -7,6 +7,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -24,27 +25,27 @@ namespace WebcamScanBarcode
         private VideoCaptureDevice videoSource;
         private string serverFtpin = @"\\192.168.145.7\ftpin\BGP_0372";
         private bool flagFrame = false;//take 1 Frame
+        private bool flagInternet = false;//take 1 Frame
 
         public frmCheckin()
         {
             InitializeComponent();
         }
-        string foldermonth;
+        const string dataLocalFolder = @"C:\BGP0372_CHECKIN";
         /*COM c1 = new COM();*/
         private void Form1_Load(object sender, EventArgs e)
         {
             /*c1.initializePort();
             lbCOM.Text=c1.getNamePort();*/
-            string datalocal = @"C:\BGP0372_CHECKIN";
-            if (!Directory.Exists(datalocal))
-                Directory.CreateDirectory(datalocal);
-            string folderyear = datalocal + @"\"  + DateTime.Now.ToString("yyyy");
-            if (!Directory.Exists(folderyear))
-                Directory.CreateDirectory(folderyear);
-            foldermonth = folderyear + @"\" + DateTime.Now.ToString("MM");
-            if (!Directory.Exists(foldermonth))
-                Directory.CreateDirectory(foldermonth);
-
+            isInternetConnected();
+            if (!Directory.Exists(dataLocalFolder))
+                Directory.CreateDirectory(dataLocalFolder);
+            if (!Directory.Exists(dataLocalFolder + @"\data"))
+                Directory.CreateDirectory(dataLocalFolder + @"\data");
+            if (!Directory.Exists(dataLocalFolder + @"\err"))
+                Directory.CreateDirectory(dataLocalFolder + @"\err");
+            if (!Directory.Exists(dataLocalFolder + @"\bk"))
+                Directory.CreateDirectory(dataLocalFolder + @"\bk");
             btnStop.Enabled = false;
             videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
             if (videoDevices.Count == 0)
@@ -54,7 +55,29 @@ namespace WebcamScanBarcode
             }
             ToolStripMenuItem toolStripMenuItem = (ToolStripMenuItem)menuStrip1.Items["registerToolStripMenuItem"];
             toolStripMenuItem.Visible = false;
-            
+        }
+        private void isInternetConnected()
+        {
+            Ping ping = new Ping();
+            try
+            {
+                PingReply reply = ping.Send("192.168.145.7", 3000); // Ping Google's server with a timeout of 3000 milliseconds (3 seconds)
+                if (reply != null && reply.Status == IPStatus.Success)
+                {
+                    flagInternet = true;
+                    lbInternet.Text = "Connected to Server";
+                    lbInternet.ForeColor = Color.Green;
+                }
+                else
+                {
+                    flagInternet = false;
+                    lbInternet.Text = "Failed Connected to Server ";
+                    lbInternet.ForeColor = Color.Red;
+                }
+            }
+            catch (PingException)
+            {
+            } 
         }
         private async void VideoSource_NewFrame(object sender, NewFrameEventArgs eventArgs)
         {
@@ -147,7 +170,7 @@ namespace WebcamScanBarcode
             lbTime.Text = "";
             lbMessage.Text = "";
         }
-        private void pushDataToPqm(string empNo, string nameOrg, string section, string timeOrg,string judge)
+        private void saveAtLocal( string empNo, string nameOrg, string section, string timeOrg,string judge)
         {
             string name = Regex.Replace(nameOrg, @"\s", "");
             string model = "BGP_0372";
@@ -159,28 +182,15 @@ namespace WebcamScanBarcode
             string[] datetime = timeOrg.Split(' ');
             string date = datetime[0];
             string time = datetime[1];
-            string nameFile = "BGP0372_" + DateTime.Now.ToString("yyyyMMddHHmmssfff")+".csv";
-            string outFile = serverFtpin+"/"+ nameFile;
+            string nameFile = "BGP0372_" + DateTime.Now.ToString("yyyyMMddHHmmssfff") + ".csv";
+            string outFile = dataLocalFolder + @"\data\" + nameFile;
             try
             {
-                System.IO.File.AppendAllText(outFile, name + "," + section + "_" + empNo + "," + model + "," + site + "," + factory + "," + line + "," + process + "," + inspect + "," + date + "," + time + "," +judge+ ","+ judge +",,\r\n");
+                System.IO.File.AppendAllText(outFile, name + "," + section + "_" + empNo + "," + model + "," + site + "," + factory + "," + line + "," + process + "," + inspect + "," + date + "," + time + "," + judge + "," + judge + ",,\r\n");
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.Message);
-            }
-        }
-        private void saveAtLocal( string empNo, string nameOrg, string section, string timeOrg,string judge)
-        {
-            try
-            {
-                string nameFile = "BGP0372_" + DateTime.Now.ToString("yyyyMMdd") + ".csv";
-                string outFile = foldermonth + "/" + nameFile;
-                System.IO.File.AppendAllText(outFile, timeOrg + "," + nameOrg + "," + section + "_" + empNo+","+ judge + "\r\n");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
+                writeErrorList(ex);
             }
         }
         private void reportToolStripMenuItem_Click(object sender, EventArgs e)
@@ -226,33 +236,79 @@ namespace WebcamScanBarcode
             string sql = "select * from bgp_0372_usermaster where serno='" + sernoQR + "' and lot='" + lotQR + "' and allow='t'";
             DataTable dt = new DataTable();
             TfSQL tf = new TfSQL();
-            tf.sqlDataAdapterFillDatatableFromTesterDb(sql, ref dt);
-            if (dt.Rows.Count < 1)
+            if (flagInternet)
             {
-                Invoke((MethodInvoker)delegate
-               {
-                   lbMessage.Text = "You are not in list to enter this room!";
-                   lbMessage.ForeColor = Color.Red;
-               });
-                await Task.Run(() => {
-                    pushDataToPqm(empNo, nameOrg, section, timeOrg, "1");
-                    saveAtLocal(empNo, nameOrg, section, timeOrg, "1");
-                });
-                /*c1.sendCmdToArduino("1");*/
+                tf.sqlDataAdapterFillDatatableFromTesterDb(sql, ref dt);
+                if (dt.Rows.Count < 1)
+                {
+                    Invoke((MethodInvoker)delegate
+                    {
+                        lbMessage.Text = "You are not in list to enter this room!";
+                        lbMessage.ForeColor = Color.Red;
+                    });
+                    await Task.Run(() => {
+                        saveAtLocal(empNo, nameOrg, section, timeOrg, "1");
+                        pushDataToPqm();
+                    });
+                    /*c1.sendCmdToArduino("1");*/
+                }
+                else
+                {
+                    Invoke((MethodInvoker)delegate
+                    {
+                        lbMessage.Text = "WELCOME. Please get in!";
+                        lbMessage.ForeColor = Color.Green;
+                    });
+                    await Task.Run(() => {
+                        saveAtLocal(empNo, nameOrg, section, timeOrg, "0");
+                        pushDataToPqm();
+                    });
+                    /*c1.sendCmdToArduino("0");*/
+                }
             }
             else
             {
                 Invoke((MethodInvoker)delegate
                 {
-                    lbMessage.Text = "WELCOME. Please get in!";
-                    lbMessage.ForeColor = Color.Green;
+                    lbMessage.Text = "No Internet. Can not check person!";
+                    lbMessage.ForeColor = Color.Red;
                 });
                 await Task.Run(() => {
-                    pushDataToPqm(empNo, nameOrg, section, timeOrg, "0");
-                    saveAtLocal(empNo, nameOrg, section, timeOrg, "0");
+                    saveAtLocal(empNo, nameOrg, section, timeOrg, "1");
                 });
-                /*c1.sendCmdToArduino("0");*/
             }
+
+        }
+        private void pushDataToPqm()
+        {
+            string[] filePathArr = Directory.GetFiles(dataLocalFolder + @"\data", "*.csv");
+            if (filePathArr.Length <= 0) return;
+            try
+            {
+                foreach (string path in filePathArr)
+                {
+                    string fileName = Path.GetFileNameWithoutExtension(path);
+                    string outFile = serverFtpin + @"\" + fileName + ".csv";
+                    string outFileBk = dataLocalFolder + @"\bk\" + fileName + ".csv";
+                    string[] lineArr = System.IO.File.ReadAllLines(path);
+                    for (int i = 0; i < lineArr.Length; i++)
+                    {
+                        System.IO.File.AppendAllText(outFile, lineArr[i] + "\r\n");
+                        System.IO.File.AppendAllText(outFileBk, lineArr[i] + "\r\n");
+                    }
+                    File.Delete(path);
+                }
+            }
+            catch (Exception ex)
+            {
+                writeErrorList(ex);
+            }
+        }
+        private void writeErrorList(Exception ex1)
+        {
+            string outFileErr = dataLocalFolder + @"\err\" + DateTime.Now.ToString("yyyyMMdd") + ".txt";
+            string inforError = $"{DateTime.Now}: {ex1.Message}";
+            System.IO.File.AppendAllText(outFileErr, inforError + "\r\n");
         }
     }
 }

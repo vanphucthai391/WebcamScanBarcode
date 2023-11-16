@@ -48,6 +48,7 @@
             this.loginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lbMessage = new System.Windows.Forms.Label();
             this.lbCOM = new System.Windows.Forms.Label();
+            this.lbInternet = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -262,12 +263,23 @@
             this.lbCOM.TabIndex = 8;
             this.lbCOM.Text = "#";
             // 
+            // lbInternet
+            // 
+            this.lbInternet.AutoSize = true;
+            this.lbInternet.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbInternet.Location = new System.Drawing.Point(12, 64);
+            this.lbInternet.Name = "lbInternet";
+            this.lbInternet.Size = new System.Drawing.Size(15, 16);
+            this.lbInternet.TabIndex = 8;
+            this.lbInternet.Text = "#";
+            // 
             // frmCheckin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Info;
             this.ClientSize = new System.Drawing.Size(1072, 483);
+            this.Controls.Add(this.lbInternet);
             this.Controls.Add(this.lbCOM);
             this.Controls.Add(this.lbMessage);
             this.Controls.Add(this.label4);
@@ -314,6 +326,7 @@
         private System.Windows.Forms.ToolStripMenuItem loginToolStripMenuItem;
         private System.Windows.Forms.Label lbMessage;
         private System.Windows.Forms.Label lbCOM;
+        private System.Windows.Forms.Label lbInternet;
     }
 }
 
