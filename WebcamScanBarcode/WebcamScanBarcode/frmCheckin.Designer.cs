@@ -30,8 +30,6 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmCheckin));
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.btnStart = new System.Windows.Forms.Button();
-            this.btnStop = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -46,12 +44,14 @@
             this.reportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.registerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.lbMessage = new System.Windows.Forms.Label();
             this.lbCOM = new System.Windows.Forms.Label();
             this.lbInternet = new System.Windows.Forms.Label();
+            this.pictureJudge = new System.Windows.Forms.PictureBox();
+            this.txtMessage = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureJudge)).BeginInit();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -60,34 +60,10 @@
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox1.Location = new System.Drawing.Point(67, 135);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(337, 193);
+            this.pictureBox1.Size = new System.Drawing.Size(294, 193);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
-            // 
-            // btnStart
-            // 
-            this.btnStart.BackColor = System.Drawing.Color.Lime;
-            this.btnStart.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnStart.Location = new System.Drawing.Point(67, 334);
-            this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(167, 58);
-            this.btnStart.TabIndex = 1;
-            this.btnStart.Text = "Start";
-            this.btnStart.UseVisualStyleBackColor = false;
-            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
-            // 
-            // btnStop
-            // 
-            this.btnStop.BackColor = System.Drawing.Color.Red;
-            this.btnStop.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnStop.Location = new System.Drawing.Point(240, 334);
-            this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(164, 58);
-            this.btnStop.TabIndex = 1;
-            this.btnStop.Text = "Stop";
-            this.btnStop.UseVisualStyleBackColor = false;
-            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
             // tableLayoutPanel1
             // 
@@ -243,16 +219,6 @@
             this.loginToolStripMenuItem.Text = "Login";
             this.loginToolStripMenuItem.Click += new System.EventHandler(this.loginToolStripMenuItem_Click);
             // 
-            // lbMessage
-            // 
-            this.lbMessage.AutoSize = true;
-            this.lbMessage.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lbMessage.Location = new System.Drawing.Point(430, 396);
-            this.lbMessage.Name = "lbMessage";
-            this.lbMessage.Size = new System.Drawing.Size(29, 31);
-            this.lbMessage.TabIndex = 7;
-            this.lbMessage.Text = "#";
-            // 
             // lbCOM
             // 
             this.lbCOM.AutoSize = true;
@@ -273,19 +239,40 @@
             this.lbInternet.TabIndex = 8;
             this.lbInternet.Text = "#";
             // 
+            // pictureJudge
+            // 
+            this.pictureJudge.Location = new System.Drawing.Point(67, 350);
+            this.pictureJudge.Name = "pictureJudge";
+            this.pictureJudge.Size = new System.Drawing.Size(294, 182);
+            this.pictureJudge.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureJudge.TabIndex = 10;
+            this.pictureJudge.TabStop = false;
+            // 
+            // txtMessage
+            // 
+            this.txtMessage.BackColor = System.Drawing.SystemColors.Info;
+            this.txtMessage.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.txtMessage.Cursor = System.Windows.Forms.Cursors.Arrow;
+            this.txtMessage.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtMessage.Location = new System.Drawing.Point(423, 442);
+            this.txtMessage.Multiline = true;
+            this.txtMessage.Name = "txtMessage";
+            this.txtMessage.ReadOnly = true;
+            this.txtMessage.Size = new System.Drawing.Size(590, 90);
+            this.txtMessage.TabIndex = 11;
+            // 
             // frmCheckin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Info;
-            this.ClientSize = new System.Drawing.Size(1072, 483);
+            this.ClientSize = new System.Drawing.Size(1072, 609);
+            this.Controls.Add(this.txtMessage);
+            this.Controls.Add(this.pictureJudge);
             this.Controls.Add(this.lbInternet);
             this.Controls.Add(this.lbCOM);
-            this.Controls.Add(this.lbMessage);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.tableLayoutPanel1);
-            this.Controls.Add(this.btnStop);
-            this.Controls.Add(this.btnStart);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.menuStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -300,6 +287,7 @@
             this.tableLayoutPanel1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureJudge)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -308,8 +296,6 @@
         #endregion
 
         private System.Windows.Forms.PictureBox pictureBox1;
-        private System.Windows.Forms.Button btnStart;
-        private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
@@ -324,9 +310,10 @@
         private System.Windows.Forms.ToolStripMenuItem reportToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem registerToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loginToolStripMenuItem;
-        private System.Windows.Forms.Label lbMessage;
         private System.Windows.Forms.Label lbCOM;
         private System.Windows.Forms.Label lbInternet;
+        private System.Windows.Forms.PictureBox pictureJudge;
+        private System.Windows.Forms.TextBox txtMessage;
     }
 }
 

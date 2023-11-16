@@ -46,7 +46,6 @@ namespace WebcamScanBarcode
                 Directory.CreateDirectory(dataLocalFolder + @"\err");
             if (!Directory.Exists(dataLocalFolder + @"\bk"))
                 Directory.CreateDirectory(dataLocalFolder + @"\bk");
-            btnStop.Enabled = false;
             videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
             if (videoDevices.Count == 0)
             {
@@ -55,6 +54,9 @@ namespace WebcamScanBarcode
             }
             ToolStripMenuItem toolStripMenuItem = (ToolStripMenuItem)menuStrip1.Items["registerToolStripMenuItem"];
             toolStripMenuItem.Visible = false;
+            videoSource = new VideoCaptureDevice(videoDevices[0].MonikerString);
+            videoSource.NewFrame += new NewFrameEventHandler(VideoSource_NewFrame);
+            videoSource.Start();
         }
         private void isInternetConnected()
         {
@@ -65,13 +67,13 @@ namespace WebcamScanBarcode
                 if (reply != null && reply.Status == IPStatus.Success)
                 {
                     flagInternet = true;
-                    lbInternet.Text = "Connected to Server";
+                    lbInternet.Text = "Connected to server";
                     lbInternet.ForeColor = Color.Green;
                 }
                 else
                 {
                     flagInternet = false;
-                    lbInternet.Text = "Failed Connected to Server ";
+                    lbInternet.Text = "Failed connect to server ";
                     lbInternet.ForeColor = Color.Red;
                 }
             }
@@ -105,15 +107,12 @@ namespace WebcamScanBarcode
                                 lbEmp.Text = _7last.Substring(_7last.Length - 5, 5);//5 last
                                 lbSection.Text = _7last.Substring(0, 2);//2 first
                                 lbTime.Text = timeCheck;
-                                await Task.Delay(1000); // Delay for 1 seconds before stopping the camera (adjust as needed)
-                                stopCamera();
-                                btnStop.Enabled = false;
-                                btnStart.Enabled = true;
+                                authenticationWithMasterList(lbEmp.Text, lbName.Text, lbSection.Text, lbTime.Text);
+                                await Task.Delay(5000); // Delay for 1 seconds before stopping the camera (adjust as needed)
+                                //stopCamera();
+                                flagFrame = false;
                             });
 
-                        });
-                        await Task.Run(() => {
-                            authenticationWithMasterList(lbEmp.Text, lbName.Text, lbSection.Text, lbTime.Text);
                         });
                     }
                     else
@@ -129,22 +128,10 @@ namespace WebcamScanBarcode
                 MessageBox.Show("Error: " + ex.Message);
             }
         }
-        private void btnStart_Click(object sender, EventArgs e)
+        private void newPerson()
         {
             flagFrame = false;
-            btnStart.Enabled = false;
-            btnStop.Enabled = true;
-            resetInfo();
-            videoSource = new VideoCaptureDevice(videoDevices[0].MonikerString);
-            videoSource.NewFrame += new NewFrameEventHandler(VideoSource_NewFrame);
-            videoSource.Start();        
-        }
-
-        private void btnStop_Click(object sender, EventArgs e)
-        {
-            btnStart.Enabled = true;
-            btnStop.Enabled = false;
-            stopCamera();
+            //resetInfo();
 
         }
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
@@ -168,7 +155,7 @@ namespace WebcamScanBarcode
             lbName.Text = "";
             lbSection.Text = "";
             lbTime.Text = "";
-            lbMessage.Text = "";
+            txtMessage.Text = "";
         }
         private void saveAtLocal( string empNo, string nameOrg, string section, string timeOrg,string judge)
         {
@@ -243,8 +230,11 @@ namespace WebcamScanBarcode
                 {
                     Invoke((MethodInvoker)delegate
                     {
-                        lbMessage.Text = "You are not in list to enter this room!";
-                        lbMessage.ForeColor = Color.Red;
+                        txtMessage.Text = "You aren't in list to enter this room. Please contact FA department for support!";
+                        string ImagePath2 = System.Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\JigQuickDesk\JigQuickApp\images\NG_BEAR.png";
+                        pictureJudge.BackgroundImageLayout = ImageLayout.Zoom;
+                        pictureJudge.BackgroundImage = System.Drawing.Image.FromFile(ImagePath2);
+                        txtMessage.ForeColor = Color.Red;
                     });
                     await Task.Run(() => {
                         saveAtLocal(empNo, nameOrg, section, timeOrg, "1");
@@ -256,8 +246,11 @@ namespace WebcamScanBarcode
                 {
                     Invoke((MethodInvoker)delegate
                     {
-                        lbMessage.Text = "WELCOME. Please get in!";
-                        lbMessage.ForeColor = Color.Green;
+                        txtMessage.Text = "Please get in!";
+                        string ImagePath2 = System.Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\JigQuickDesk\JigQuickApp\images\OK_BEAR.png";
+                        pictureJudge.BackgroundImageLayout = ImageLayout.Zoom;
+                        pictureJudge.BackgroundImage = System.Drawing.Image.FromFile(ImagePath2);
+                        txtMessage.ForeColor = Color.Green;
                     });
                     await Task.Run(() => {
                         saveAtLocal(empNo, nameOrg, section, timeOrg, "0");
@@ -270,8 +263,8 @@ namespace WebcamScanBarcode
             {
                 Invoke((MethodInvoker)delegate
                 {
-                    lbMessage.Text = "No Internet. Can not check person!";
-                    lbMessage.ForeColor = Color.Red;
+                    //lbMessage.Text = "No Internet. Can not check person!";
+                    //lbMessage.ForeColor = Color.Red;
                 });
                 await Task.Run(() => {
                     saveAtLocal(empNo, nameOrg, section, timeOrg, "1");
