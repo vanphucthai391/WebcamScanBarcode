@@ -32,11 +32,11 @@ namespace WebcamScanBarcode
             InitializeComponent();
         }
         const string dataLocalFolder = @"C:\BGP0372_CHECKIN";
-        /*COM c1 = new COM();*/
+        COM c1 = new COM();
         private void Form1_Load(object sender, EventArgs e)
         {
-            /*c1.initializePort();
-            lbCOM.Text=c1.getNamePort();*/
+            c1.initializePort();
+            lbCOM.Text=c1.getNamePort();
             isInternetConnected();
             if (!Directory.Exists(dataLocalFolder))
                 Directory.CreateDirectory(dataLocalFolder);
@@ -46,6 +46,8 @@ namespace WebcamScanBarcode
                 Directory.CreateDirectory(dataLocalFolder + @"\err");
             if (!Directory.Exists(dataLocalFolder + @"\bk"))
                 Directory.CreateDirectory(dataLocalFolder + @"\bk");
+            if (flagInternet)
+                pushDataToPqm();
             videoDevices = new FilterInfoCollection(FilterCategory.VideoInputDevice);
             if (videoDevices.Count == 0)
             {
@@ -108,8 +110,10 @@ namespace WebcamScanBarcode
                                 lbSection.Text = _7last.Substring(0, 2);//2 first
                                 lbTime.Text = timeCheck;
                                 authenticationWithMasterList(lbEmp.Text, lbName.Text, lbSection.Text, lbTime.Text);
-                                await Task.Delay(5000); // Delay for 1 seconds before stopping the camera (adjust as needed)
-                                //stopCamera();
+                                await Task.Delay(3000); // Delay for 1 seconds before stopping the camera (adjust as needed)
+                                string ImagePath2 = System.Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\JigQuickDesk\JigQuickApp\images\STANDBY.bmp";
+                                pictureJudge.BackgroundImageLayout = ImageLayout.Zoom;
+                                pictureJudge.BackgroundImage = System.Drawing.Image.FromFile(ImagePath2);
                                 flagFrame = false;
                             });
 
@@ -137,7 +141,7 @@ namespace WebcamScanBarcode
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             stopCamera();
-            /*c1.closeSerialPort();*/
+            c1.closeSerialPort();
         }
         private void stopCamera()
         {
@@ -146,7 +150,6 @@ namespace WebcamScanBarcode
                 videoSource.Stop();
                 pictureBox1.Image = null;
                 videoSource = null;
-
             }
         }
         private void resetInfo()
@@ -166,6 +169,15 @@ namespace WebcamScanBarcode
             string line = "1";
             string process = "GATE";
             string inspect = "CHECKIN";
+            string inspectData;
+            if (flagInternet)
+            {
+                inspectData = judge;
+            }
+            else
+            {
+                inspectData = "2";
+            }
             string[] datetime = timeOrg.Split(' ');
             string date = datetime[0];
             string time = datetime[1];
@@ -173,7 +185,7 @@ namespace WebcamScanBarcode
             string outFile = dataLocalFolder + @"\data\" + nameFile;
             try
             {
-                System.IO.File.AppendAllText(outFile, name + "," + section + "_" + empNo + "," + model + "," + site + "," + factory + "," + line + "," + process + "," + inspect + "," + date + "," + time + "," + judge + "," + judge + ",,\r\n");
+                System.IO.File.AppendAllText(outFile, name + "," + section + "_" + empNo + "," + model + "," + site + "," + factory + "," + line + "," + process + "," + inspect + "," + date + "," + time + "," + inspectData + "," + judge + ",,\r\n");
             }
             catch (Exception ex)
             {
@@ -230,7 +242,7 @@ namespace WebcamScanBarcode
                 {
                     Invoke((MethodInvoker)delegate
                     {
-                        txtMessage.Text = "You aren't in list to enter this room. Please contact FA department for support!";
+                        txtMessage.Text = "You are not in list to enter this room. Please contact FA for support!";
                         string ImagePath2 = System.Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\JigQuickDesk\JigQuickApp\images\NG_BEAR.png";
                         pictureJudge.BackgroundImageLayout = ImageLayout.Zoom;
                         pictureJudge.BackgroundImage = System.Drawing.Image.FromFile(ImagePath2);
@@ -239,8 +251,8 @@ namespace WebcamScanBarcode
                     await Task.Run(() => {
                         saveAtLocal(empNo, nameOrg, section, timeOrg, "1");
                         pushDataToPqm();
+                        c1.sendCmdToArduino("1");
                     });
-                    /*c1.sendCmdToArduino("1");*/
                 }
                 else
                 {
@@ -255,16 +267,17 @@ namespace WebcamScanBarcode
                     await Task.Run(() => {
                         saveAtLocal(empNo, nameOrg, section, timeOrg, "0");
                         pushDataToPqm();
+                        c1.sendCmdToArduino("0");
                     });
-                    /*c1.sendCmdToArduino("0");*/
                 }
             }
             else
             {
                 Invoke((MethodInvoker)delegate
                 {
-                    //lbMessage.Text = "No Internet. Can not check person!";
-                    //lbMessage.ForeColor = Color.Red;
+                    txtMessage.Text = "No internet. Your information has been saved!";
+                    txtMessage.ForeColor = Color.Red;
+                    c1.sendCmdToArduino("1");
                 });
                 await Task.Run(() => {
                     saveAtLocal(empNo, nameOrg, section, timeOrg, "1");

@@ -182,7 +182,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="4597922 %281%29.ico" />
-    <None Include="Resources\3595577-200.png" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5.2">
