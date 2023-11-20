@@ -21,7 +21,7 @@ namespace WebcamScanBarcode
         }
         private void btnCreateBarcode_Click(object sender, EventArgs e)
         {
-            string text = "##"+ txtName.Text + txtSection.Text + txtEmployeeCode.Text;
+            string text = txtName.Text+"," + txtSection.Text + "," + txtEmployeeCode.Text;
             QRCoder.QRCodeGenerator qg = new QRCoder.QRCodeGenerator();
             var myData = qg.CreateQrCode(text, QRCoder.QRCodeGenerator.ECCLevel.H);
             var code = new QRCoder.QRCode(myData);

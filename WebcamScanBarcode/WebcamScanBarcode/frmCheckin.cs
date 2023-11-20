@@ -93,20 +93,23 @@ namespace WebcamScanBarcode
                 {
                     flagFrame = true;
                     string decodedText = result.Text;
-                    //string[] decodedTextArray = decodedText.Split(';');
-                    if(decodedText.StartsWith("##"))
+                    string [] decodedTextArr = decodedText.Split(',');
+                    if (decodedTextArr.Length==3)
                     {
                         string timeCheck = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss tt");//don't change format here
                         await Task.Run(() => {
                             Invoke((MethodInvoker)async delegate
                             {
-                                string decodedText_remove2First = decodedText.Substring(2);
-                                lbName.Text = decodedText_remove2First.Substring(0, decodedText_remove2First.Length - 7);
-                                string decodedText_remove5Last = decodedText.Substring(2);
-                                string _7last = decodedText.Substring(decodedText.Length - 7, 7);//7 last
-                                lbEmp.Text = _7last.Substring(_7last.Length - 5, 5);//5 last
-                                lbSection.Text = _7last.Substring(0, 2);//2 first
+                                //string decodedText_remove2First = decodedText.Substring(2);
+                                //lbName.Text = decodedText_remove2First.Substring(0, decodedText_remove2First.Length - 7);
+                                //string decodedText_remove5Last = decodedText.Substring(2);
+                                //string _7last = decodedText.Substring(decodedText.Length - 7, 7);//7 last
+                                //lbEmp.Text = _7last.Substring(_7last.Length - 5, 5);//5 last
+                                //lbSection.Text = _7last.Substring(0, 2);//2 first
                                 lbTime.Text = timeCheck;
+                                lbName.Text = decodedTextArr[0];
+                                lbSection.Text= decodedTextArr[1];
+                                lbEmp.Text= decodedTextArr[2];
                                 authenticationWithMasterList(lbEmp.Text, lbName.Text, lbSection.Text, lbTime.Text);
                                 await Task.Delay(3000); // Delay for 1 seconds before stopping the camera (adjust as needed)
                                 string ImagePath2 = System.Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\JigQuickDesk\JigQuickApp\images\STANDBY.bmp";
@@ -226,18 +229,14 @@ namespace WebcamScanBarcode
             ToolStripMenuItem toolStripMenuItem = (ToolStripMenuItem)menuStrip1.Items["registerToolStripMenuItem"];
             toolStripMenuItem.Visible = flag;
         }
-        private async void authenticationWithMasterList(string empNo, string nameOrg, string section, string timeOrg)
+        private async void authenticationWithMasterList(string empNo, string nameOrg, string sectionOrg, string timeOrg)
         {
-            string sernoQR = Regex.Replace(nameOrg, @"\s", "");
-            string lotQR = section + "_" + empNo;
-            string sql = "select * from bgp_0372_usermaster where serno='" + sernoQR + "' and lot='" + lotQR + "' and allow='t'";
+            string sql = "select * from bgp_0372_usermaster where name='" + nameOrg + "' and emp_no='"+ empNo + "' and section='" + sectionOrg + "' and allow='t'";
             DataTable dt = new DataTable();
             TfSQL tf = new TfSQL();
             if (flagInternet)
             {
                 tf.sqlDataAdapterFillDatatableFromTesterDb(sql, ref dt);
-                byte[] imageUser = tf.getImageUser(sernoQR, lotQR);
-                Image image = byteArrayToImage(imageUser);
                 if (dt.Rows.Count < 1)
                 {
                     Invoke((MethodInvoker)delegate
@@ -249,13 +248,15 @@ namespace WebcamScanBarcode
                         txtMessage.ForeColor = Color.Red;
                     });
                     await Task.Run(() => {
-                        saveAtLocal(empNo, nameOrg, section, timeOrg, "1");
+                        saveAtLocal(empNo, nameOrg, sectionOrg, timeOrg, "1");
                         pushDataToPqm();
                         c1.sendCmdToArduino("1");
                     });
                 }
                 else
                 {
+                    byte[] imageUser = tf.getImageUser(nameOrg, sectionOrg, empNo);
+                    Image image = byteArrayToImage(imageUser);
                     Invoke((MethodInvoker)delegate
                     {
                         txtMessage.Text = "Please get in!";
@@ -266,7 +267,7 @@ namespace WebcamScanBarcode
                         pictureBoxUser.Image = image;
                     });
                     await Task.Run(() => {
-                        saveAtLocal(empNo, nameOrg, section, timeOrg, "0");
+                        saveAtLocal(empNo, nameOrg, sectionOrg, timeOrg, "0");
                         pushDataToPqm();
                         c1.sendCmdToArduino("0");
                     });
@@ -276,12 +277,12 @@ namespace WebcamScanBarcode
             {
                 Invoke((MethodInvoker)delegate
                 {
-                    txtMessage.Text = "No internet. Your information has been saved!";
+                    txtMessage.Text = "Your information has been saved!";
                     txtMessage.ForeColor = Color.Red;
                     c1.sendCmdToArduino("1");
                 });
                 await Task.Run(() => {
-                    saveAtLocal(empNo, nameOrg, section, timeOrg, "1");
+                    saveAtLocal(empNo, nameOrg, sectionOrg, timeOrg, "1");
                 });
             }
 

@@ -43,7 +43,7 @@ namespace WebcamScanBarcode
                 return false;
             }
         }
-        public byte[] getImageUser(string serno, string lot)
+        public byte[] getImageUser(string name, string section, string emp_no)
         {
             using (NpgsqlConnection connection = new NpgsqlConnection(conStringTesterDb))
             {
@@ -52,10 +52,10 @@ namespace WebcamScanBarcode
                 {
                     cmd.Connection = connection;
                     cmd.CommandType = CommandType.Text;
-                    cmd.CommandText = $"SELECT image FROM bgp_0372_usermaster WHERE serno=@serno and lot=@lot";
-                    cmd.Parameters.AddWithValue("serno", serno);
-                    cmd.Parameters.AddWithValue("lot", lot);
-
+                    cmd.CommandText = $"SELECT image FROM bgp_0372_usermaster WHERE emp_no = @emp_no and name=@name and section=@section";
+                    cmd.Parameters.AddWithValue("name", name);
+                    cmd.Parameters.AddWithValue("section", section);
+                    cmd.Parameters.AddWithValue("emp_no", emp_no);
                     using (NpgsqlDataReader reader = cmd.ExecuteReader())
                     {
                         if (reader.Read())
