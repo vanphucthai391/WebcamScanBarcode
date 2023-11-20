@@ -12,25 +12,28 @@ namespace WebcamScanBarcode
     {
         private SerialPort serialPort1;
         private string selectPort;
+
         public void initializePort()
         {
-            serialPort1 = new SerialPort();
-            string[] portList = SerialPort.GetPortNames();
-            selectPort = portList[0];
-            if (serialPort1.IsOpen) return;
-            serialPort1.PortName = selectPort;
-            serialPort1.BaudRate = 9600;
-            serialPort1.DataBits = 8;
-            serialPort1.Parity = Parity.None;
-            serialPort1.StopBits = StopBits.One;
-            serialPort1.Encoding = Encoding.ASCII;
             try
             {
+                serialPort1 = new SerialPort();
+                string[] portList = SerialPort.GetPortNames();
+                selectPort = portList[0];
+                if (serialPort1.IsOpen) return;
+                serialPort1.PortName = selectPort;
+                serialPort1.BaudRate = 9600;
+                serialPort1.DataBits = 8;
+                serialPort1.Parity = Parity.None;
+                serialPort1.StopBits = StopBits.One;
+                serialPort1.Encoding = Encoding.ASCII;
                 serialPort1.Open();
             }
-            catch (Exception ex)
+            catch
             {
-                MessageBox.Show(ex.Message);
+                DialogResult d1 =MessageBox.Show("Not found COM port","Warning",MessageBoxButtons.OK,MessageBoxIcon.Warning);
+                if (d1 == DialogResult.OK)
+                    Environment.Exit(1);
             }
         }
 

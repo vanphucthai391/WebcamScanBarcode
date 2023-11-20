@@ -43,5 +43,31 @@ namespace WebcamScanBarcode
                 return false;
             }
         }
+        public byte[] getImageUser(string serno, string lot)
+        {
+            using (NpgsqlConnection connection = new NpgsqlConnection(conStringTesterDb))
+            {
+                connection.Open();
+                using (NpgsqlCommand cmd = new NpgsqlCommand())
+                {
+                    cmd.Connection = connection;
+                    cmd.CommandType = CommandType.Text;
+                    cmd.CommandText = $"SELECT image FROM bgp_0372_usermaster WHERE serno=@serno and lot=@lot";
+                    cmd.Parameters.AddWithValue("serno", serno);
+                    cmd.Parameters.AddWithValue("lot", lot);
+
+                    using (NpgsqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            if (reader["image"] != DBNull.Value)
+                                return (byte[])reader["image"];
+                        }
+                    }
+                }
+                connection.Close();
+            }
+            return null;
+        }
     }
 }

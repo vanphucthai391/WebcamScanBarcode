@@ -48,12 +48,12 @@
             this.txtMessage = new System.Windows.Forms.TextBox();
             this.pictureJudge = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.pbInformation = new System.Windows.Forms.PictureBox();
+            this.pictureBoxUser = new System.Windows.Forms.PictureBox();
             this.tableLayoutPanel1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureJudge)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbInformation)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUser)).BeginInit();
             this.SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -74,92 +74,92 @@
             this.tableLayoutPanel1.RowCount = 4;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 47F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(549, 193);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 53F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(557, 217);
             this.tableLayoutPanel1.TabIndex = 3;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(3, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(100, 25);
+            this.label1.Size = new System.Drawing.Size(127, 31);
             this.label1.TabIndex = 0;
             this.label1.Text = "Emp. No:";
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(3, 48);
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(3, 56);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(74, 25);
+            this.label2.Size = new System.Drawing.Size(94, 31);
             this.label2.TabIndex = 0;
             this.label2.Text = "Name:";
             // 
             // lbEmp
             // 
             this.lbEmp.AutoSize = true;
-            this.lbEmp.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbEmp.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbEmp.ForeColor = System.Drawing.Color.Blue;
-            this.lbEmp.Location = new System.Drawing.Point(154, 0);
+            this.lbEmp.Location = new System.Drawing.Point(156, 0);
             this.lbEmp.Name = "lbEmp";
-            this.lbEmp.Size = new System.Drawing.Size(24, 25);
+            this.lbEmp.Size = new System.Drawing.Size(29, 31);
             this.lbEmp.TabIndex = 0;
             this.lbEmp.Text = "#";
             // 
             // lbName
             // 
             this.lbName.AutoSize = true;
-            this.lbName.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbName.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbName.ForeColor = System.Drawing.Color.Blue;
-            this.lbName.Location = new System.Drawing.Point(154, 48);
+            this.lbName.Location = new System.Drawing.Point(156, 56);
             this.lbName.Name = "lbName";
-            this.lbName.Size = new System.Drawing.Size(24, 25);
+            this.lbName.Size = new System.Drawing.Size(29, 31);
             this.lbName.TabIndex = 0;
             this.lbName.Text = "#";
             // 
             // lbSection
             // 
             this.lbSection.AutoSize = true;
-            this.lbSection.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbSection.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbSection.ForeColor = System.Drawing.Color.Blue;
-            this.lbSection.Location = new System.Drawing.Point(154, 96);
+            this.lbSection.Location = new System.Drawing.Point(156, 112);
             this.lbSection.Name = "lbSection";
-            this.lbSection.Size = new System.Drawing.Size(24, 25);
+            this.lbSection.Size = new System.Drawing.Size(29, 31);
             this.lbSection.TabIndex = 0;
             this.lbSection.Text = "#";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(3, 146);
+            this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label3.Location = new System.Drawing.Point(3, 165);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(88, 25);
+            this.label3.Size = new System.Drawing.Size(112, 31);
             this.label3.TabIndex = 0;
             this.label3.Text = "Time In:";
             // 
             // lbTime
             // 
             this.lbTime.AutoSize = true;
-            this.lbTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lbTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lbTime.ForeColor = System.Drawing.Color.Blue;
-            this.lbTime.Location = new System.Drawing.Point(154, 146);
+            this.lbTime.Location = new System.Drawing.Point(156, 165);
             this.lbTime.Name = "lbTime";
-            this.lbTime.Size = new System.Drawing.Size(24, 25);
+            this.lbTime.Size = new System.Drawing.Size(29, 31);
             this.lbTime.TabIndex = 0;
             this.lbTime.Text = "#";
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(3, 96);
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(3, 112);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(90, 25);
+            this.label5.Size = new System.Drawing.Size(113, 31);
             this.label5.TabIndex = 0;
             this.label5.Text = "Section:";
             // 
@@ -171,7 +171,7 @@
             this.label4.BackColor = System.Drawing.Color.Transparent;
             this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label4.ForeColor = System.Drawing.Color.Blue;
-            this.label4.Location = new System.Drawing.Point(424, 64);
+            this.label4.Location = new System.Drawing.Point(570, 64);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(169, 37);
             this.label4.TabIndex = 4;
@@ -185,7 +185,7 @@
             this.loginToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1352, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1269, 24);
             this.menuStrip1.TabIndex = 6;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -240,12 +240,12 @@
             this.txtMessage.Multiline = true;
             this.txtMessage.Name = "txtMessage";
             this.txtMessage.ReadOnly = true;
-            this.txtMessage.Size = new System.Drawing.Size(788, 90);
+            this.txtMessage.Size = new System.Drawing.Size(552, 90);
             this.txtMessage.TabIndex = 11;
             // 
             // pictureJudge
             // 
-            this.pictureJudge.Location = new System.Drawing.Point(77, 413);
+            this.pictureJudge.Location = new System.Drawing.Point(115, 433);
             this.pictureJudge.Name = "pictureJudge";
             this.pictureJudge.Size = new System.Drawing.Size(195, 156);
             this.pictureJudge.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -258,26 +258,27 @@
             this.pictureBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox1.Location = new System.Drawing.Point(77, 172);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(281, 193);
+            this.pictureBox1.Size = new System.Drawing.Size(281, 196);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
-            // pbInformation
+            // pictureBoxUser
             // 
-            this.pbInformation.Location = new System.Drawing.Point(986, 77);
-            this.pbInformation.Name = "pbInformation";
-            this.pbInformation.Size = new System.Drawing.Size(247, 288);
-            this.pbInformation.TabIndex = 12;
-            this.pbInformation.TabStop = false;
+            this.pictureBoxUser.Location = new System.Drawing.Point(968, 172);
+            this.pictureBoxUser.Name = "pictureBoxUser";
+            this.pictureBoxUser.Size = new System.Drawing.Size(208, 217);
+            this.pictureBoxUser.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBoxUser.TabIndex = 12;
+            this.pictureBoxUser.TabStop = false;
             // 
             // frmCheckin
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Info;
-            this.ClientSize = new System.Drawing.Size(1352, 686);
-            this.Controls.Add(this.pbInformation);
+            this.ClientSize = new System.Drawing.Size(1269, 667);
+            this.Controls.Add(this.pictureBoxUser);
             this.Controls.Add(this.txtMessage);
             this.Controls.Add(this.pictureJudge);
             this.Controls.Add(this.lbInternet);
@@ -299,7 +300,7 @@
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureJudge)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pbInformation)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxUser)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -326,7 +327,7 @@
         private System.Windows.Forms.Label lbInternet;
         private System.Windows.Forms.PictureBox pictureJudge;
         private System.Windows.Forms.TextBox txtMessage;
-        private System.Windows.Forms.PictureBox pbInformation;
+        private System.Windows.Forms.PictureBox pictureBoxUser;
     }
 }
 

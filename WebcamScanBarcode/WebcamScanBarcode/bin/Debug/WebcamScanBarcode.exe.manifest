@@ -115,14 +115,14 @@
     </dependentAssembly>
   </dependency>
   <dependency>
-    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WebcamScanBarcode.exe" size="904128">
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="WebcamScanBarcode.exe" size="905664">
       <assemblyIdentity name="WebcamScanBarcode" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
       <hash>
         <dsig:Transforms>
           <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
         </dsig:Transforms>
         <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha256" />
-        <dsig:DigestValue>uQ2A8GK/GTL1Ne0FAtFGHiggAbWONSpQRYzX8Egdy0w=</dsig:DigestValue>
+        <dsig:DigestValue>8XvZl4HRI8DMIWVqU0nt1lZFCSatPsTDZ3CfCmJksE4=</dsig:DigestValue>
       </hash>
     </dependentAssembly>
   </dependency>

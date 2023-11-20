@@ -65,17 +65,15 @@ namespace WebcamScanBarcode
             Ping ping = new Ping();
             try
             {
-                PingReply reply = ping.Send("192.168.145.7", 3000); // Ping Google's server with a timeout of 3000 milliseconds (3 seconds)
+                PingReply reply = ping.Send("192.168.145.7", 3000);
                 if (reply != null && reply.Status == IPStatus.Success)
                 {
                     flagInternet = true;
-                    lbInternet.Text = "Connected to server";
-                    lbInternet.ForeColor = Color.Green;
                 }
                 else
                 {
                     flagInternet = false;
-                    lbInternet.Text = "Failed connect to server ";
+                    lbInternet.Text = "No Internet ";
                     lbInternet.ForeColor = Color.Red;
                 }
             }
@@ -238,6 +236,8 @@ namespace WebcamScanBarcode
             if (flagInternet)
             {
                 tf.sqlDataAdapterFillDatatableFromTesterDb(sql, ref dt);
+                byte[] imageUser = tf.getImageUser(sernoQR, lotQR);
+                Image image = byteArrayToImage(imageUser);
                 if (dt.Rows.Count < 1)
                 {
                     Invoke((MethodInvoker)delegate
@@ -263,6 +263,7 @@ namespace WebcamScanBarcode
                         pictureJudge.BackgroundImageLayout = ImageLayout.Zoom;
                         pictureJudge.BackgroundImage = System.Drawing.Image.FromFile(ImagePath2);
                         txtMessage.ForeColor = Color.Green;
+                        pictureBoxUser.Image = image;
                     });
                     await Task.Run(() => {
                         saveAtLocal(empNo, nameOrg, section, timeOrg, "0");
@@ -315,6 +316,16 @@ namespace WebcamScanBarcode
             string outFileErr = dataLocalFolder + @"\err\" + DateTime.Now.ToString("yyyyMMdd") + ".txt";
             string inforError = $"{DateTime.Now}: {ex1.Message}";
             System.IO.File.AppendAllText(outFileErr, inforError + "\r\n");
+        }
+        private Image byteArrayToImage(byte[] byteArray)
+        {
+            if (byteArray == null || byteArray.Length == 0)
+                return null;
+
+            using (MemoryStream ms = new MemoryStream(byteArray))
+            {
+                return Image.FromStream(ms);
+            }
         }
     }
 }
