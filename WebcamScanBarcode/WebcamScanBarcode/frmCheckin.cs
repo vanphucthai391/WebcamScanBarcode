@@ -26,6 +26,7 @@ namespace WebcamScanBarcode
         private string serverFtpin = @"\\192.168.145.7\ftpin\BGP_0372";
         private bool flagFrame = false;//take 1 Frame
         private bool flagInternet = false;//take 1 Frame
+        bool sound;
 
         public frmCheckin()
         {
@@ -79,6 +80,7 @@ namespace WebcamScanBarcode
             }
             catch (PingException)
             {
+
             } 
         }
         private async void VideoSource_NewFrame(object sender, NewFrameEventArgs eventArgs)
@@ -96,16 +98,12 @@ namespace WebcamScanBarcode
                     string [] decodedTextArr = decodedText.Split(',');
                     if (decodedTextArr.Length==3)
                     {
+                        soundAlarm();
                         string timeCheck = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss tt");//don't change format here
                         await Task.Run(() => {
                             Invoke((MethodInvoker)async delegate
                             {
-                                //string decodedText_remove2First = decodedText.Substring(2);
-                                //lbName.Text = decodedText_remove2First.Substring(0, decodedText_remove2First.Length - 7);
-                                //string decodedText_remove5Last = decodedText.Substring(2);
-                                //string _7last = decodedText.Substring(decodedText.Length - 7, 7);//7 last
-                                //lbEmp.Text = _7last.Substring(_7last.Length - 5, 5);//5 last
-                                //lbSection.Text = _7last.Substring(0, 2);//2 first
+                                soundAlarm();
                                 lbTime.Text = timeCheck;
                                 lbName.Text = decodedTextArr[0];
                                 lbSection.Text= decodedTextArr[1];
@@ -231,47 +229,44 @@ namespace WebcamScanBarcode
         }
         private async void authenticationWithMasterList(string empNo, string nameOrg, string sectionOrg, string timeOrg)
         {
-            string sql = "select * from bgp_0372_usermaster where name='" + nameOrg + "' and emp_no='"+ empNo + "' and section='" + sectionOrg + "' and allow='t'";
+            string sql = "select name, emp_no, section from bgp_0372_usermaster where name='" + nameOrg + "' and emp_no='"+ empNo + "' and section='" + sectionOrg + "' and allow='t'";
             DataTable dt = new DataTable();
             TfSQL tf = new TfSQL();
-            if (flagInternet)
+            tf.sqlDataAdapterFillDatatableFromTesterDb(sql, ref dt);
+            flagInternet = tf.getStatusSQLConnection();
+            if (dt.Rows.Count < 1 && flagInternet)
             {
-                tf.sqlDataAdapterFillDatatableFromTesterDb(sql, ref dt);
-                if (dt.Rows.Count < 1)
+                Invoke((MethodInvoker)delegate
                 {
-                    Invoke((MethodInvoker)delegate
-                    {
-                        txtMessage.Text = "You are not in list to enter this room. Please contact FA for support!";
-                        string ImagePath2 = System.Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\JigQuickDesk\JigQuickApp\images\NG_BEAR.png";
-                        pictureJudge.BackgroundImageLayout = ImageLayout.Zoom;
-                        pictureJudge.BackgroundImage = System.Drawing.Image.FromFile(ImagePath2);
-                        txtMessage.ForeColor = Color.Red;
-                    });
-                    await Task.Run(() => {
-                        saveAtLocal(empNo, nameOrg, sectionOrg, timeOrg, "1");
-                        pushDataToPqm();
-                        c1.sendCmdToArduino("1");
-                    });
-                }
-                else
+                    txtMessage.Text = "You are not in list to enter this room. Please contact FA for support!";
+                    string ImagePath2 = System.Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\JigQuickDesk\JigQuickApp\images\NG_BEAR.png";
+                    pictureJudge.BackgroundImageLayout = ImageLayout.Zoom;
+                    pictureJudge.BackgroundImage = System.Drawing.Image.FromFile(ImagePath2);
+                    txtMessage.ForeColor = Color.Red;
+                });
+                await Task.Run(() => {
+                    saveAtLocal(empNo, nameOrg, sectionOrg, timeOrg, "1");
+                    pushDataToPqm();
+                    c1.sendCmdToArduino("1");
+                });
+            }
+            else if (dt.Rows.Count >= 1 && flagInternet)
+            {
+                //byte[] imageUser = tf.getImageUser(nameOrg, sectionOrg, empNo);
+                Invoke((MethodInvoker)delegate
                 {
-                    byte[] imageUser = tf.getImageUser(nameOrg, sectionOrg, empNo);
-                    Image image = byteArrayToImage(imageUser);
-                    Invoke((MethodInvoker)delegate
-                    {
-                        txtMessage.Text = "Please get in!";
-                        string ImagePath2 = System.Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\JigQuickDesk\JigQuickApp\images\OK_BEAR.png";
-                        pictureJudge.BackgroundImageLayout = ImageLayout.Zoom;
-                        pictureJudge.BackgroundImage = System.Drawing.Image.FromFile(ImagePath2);
-                        txtMessage.ForeColor = Color.Green;
-                        pictureBoxUser.Image = image;
-                    });
-                    await Task.Run(() => {
-                        saveAtLocal(empNo, nameOrg, sectionOrg, timeOrg, "0");
-                        pushDataToPqm();
-                        c1.sendCmdToArduino("0");
-                    });
-                }
+                    txtMessage.Text = "Please get in!";
+                    string ImagePath2 = System.Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\JigQuickDesk\JigQuickApp\images\OK_BEAR.png";
+                    pictureJudge.BackgroundImageLayout = ImageLayout.Zoom;
+                    pictureJudge.BackgroundImage = System.Drawing.Image.FromFile(ImagePath2);
+                    txtMessage.ForeColor = Color.Green;
+                    //convertByteArrayToImage(imageUser, ref pictureBoxUser);
+                });
+                await Task.Run(() => {
+                    saveAtLocal(empNo, nameOrg, sectionOrg, timeOrg, "0");
+                    pushDataToPqm();
+                    c1.sendCmdToArduino("0");
+                });
             }
             else
             {
@@ -318,15 +313,38 @@ namespace WebcamScanBarcode
             string inforError = $"{DateTime.Now}: {ex1.Message}";
             System.IO.File.AppendAllText(outFileErr, inforError + "\r\n");
         }
-        private Image byteArrayToImage(byte[] byteArray)
+        private string aliasName = "MediaFile";
+        [System.Runtime.InteropServices.DllImport("winmm.dll")]
+        private static extern int mciSendString(String command, StringBuilder buffer, int bufferSize, IntPtr hwndCallback);
+        private void soundAlarm()
         {
-            if (byteArray == null || byteArray.Length == 0)
-                return null;
+            string currentDir = System.Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\JigQuickDesk\JigQuickApp\images";
+            string fileName = currentDir + @"\beep.mp3";
+            string cmd;
 
-            using (MemoryStream ms = new MemoryStream(byteArray))
+            if (sound)
             {
-                return Image.FromStream(ms);
+                cmd = "stop " + aliasName;
+                mciSendString(cmd, null, 0, IntPtr.Zero);
+                cmd = "close " + aliasName;
+                mciSendString(cmd, null, 0, IntPtr.Zero);
+                sound = false;
             }
+
+            cmd = "open \"" + fileName + "\" type mpegvideo alias " + aliasName;
+            if (mciSendString(cmd, null, 0, IntPtr.Zero) != 0) return;
+            cmd = "play " + aliasName;
+            mciSendString(cmd, null, 0, IntPtr.Zero);
+            sound = true;
         }
+        //private void convertByteArrayToImage(byte[] byteArray, ref PictureBox picturBox1)
+        //{
+        //    if (byteArray == null || byteArray.Length == 0)
+        //        return;
+        //    using (MemoryStream ms = new MemoryStream(byteArray))
+        //    {
+        //        picturBox1.Image= Image.FromStream(ms);
+        //    }
+        //}
     }
 }
