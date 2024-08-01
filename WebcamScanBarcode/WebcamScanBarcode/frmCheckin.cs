@@ -98,7 +98,6 @@ namespace WebcamScanBarcode
                     string [] decodedTextArr = decodedText.Split(',');
                     if (decodedTextArr.Length==3)
                     {
-                        soundAlarm();
                         string timeCheck = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss tt");//don't change format here
                         await Task.Run(() => {
                             Invoke((MethodInvoker)async delegate
@@ -109,10 +108,10 @@ namespace WebcamScanBarcode
                                 lbSection.Text= decodedTextArr[1];
                                 lbEmp.Text= decodedTextArr[2];
                                 authenticationWithMasterList(lbEmp.Text, lbName.Text, lbSection.Text, lbTime.Text);
-                                await Task.Delay(3000); // Delay for 1 seconds before stopping the camera (adjust as needed)
-                                string ImagePath2 = System.Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\JigQuickDesk\JigQuickApp\images\STANDBY.bmp";
-                                pictureJudge.BackgroundImageLayout = ImageLayout.Zoom;
-                                pictureJudge.BackgroundImage = System.Drawing.Image.FromFile(ImagePath2);
+                                await Task.Delay(1000); // Delay for 1 seconds before stopping the camera (adjust as needed)
+                                //string ImagePath2 = System.Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\JigQuickDesk\JigQuickApp\images\STANDBY.bmp";
+                                //pictureJudge.BackgroundImageLayout = ImageLayout.Zoom;
+                                //pictureJudge.BackgroundImage = System.Drawing.Image.FromFile(ImagePath2);
                                 flagFrame = false;
                             });
 
@@ -255,7 +254,7 @@ namespace WebcamScanBarcode
                 //byte[] imageUser = tf.getImageUser(nameOrg, sectionOrg, empNo);
                 Invoke((MethodInvoker)delegate
                 {
-                    txtMessage.Text = "Please get in!";
+                    //txtMessage.Text = "Please get in!";
                     string ImagePath2 = System.Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory) + @"\JigQuickDesk\JigQuickApp\images\OK_BEAR.png";
                     pictureJudge.BackgroundImageLayout = ImageLayout.Zoom;
                     pictureJudge.BackgroundImage = System.Drawing.Image.FromFile(ImagePath2);

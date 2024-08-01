@@ -46,4 +46,6 @@ D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarco
 D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarcode\obj\Debug\WebcamScanBarcode.frmRegister.resources
 D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarcode\obj\Debug\WebcamScanBarcode.frmLogin.resources
 D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarcode\obj\Debug\WebcamScanBarcode.frmCheckin.resources
-D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarcode\obj\Debug\WebcamScanBarcode.csprojResolveAssemblyReference.cache
+D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarcode\obj\Debug\WebcamScanBarcode.csprojAssemblyReference.cache
+D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarcode\obj\Debug\WebcamScanBarcode.csproj.CoreCompileInputs.cache
+D:\thaivanphuc\Git_nidecSHTP\WebcamScanBarcode\WebcamScanBarcode\WebcamScanBarcode\obj\Debug\WebcamScanBarcode.csproj.CopyComplete
